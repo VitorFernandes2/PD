@@ -18,6 +18,10 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 }
 
+bootJar {
+	archiveName = "WEBCRAWLER.jar"
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
