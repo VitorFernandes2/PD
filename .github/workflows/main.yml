@@ -32,11 +32,11 @@ jobs:
           # Jenkins full URL including http/https protocol
           url: "http://2.82.194.204/"
           # User name of Jenkins
-          user_name: "Async"
+          user_name: "Async Guys"
           # Jenkins API token
-        api_token: "110e998d7b393003c3d443d8c0fff1aae5"
-        # Job name
-        job_name: "WebCrawler"
+          api_token: "110e998d7b393003c3d443d8c0fff1aae5"
+          # Job name
+          job_name: "WebCrawler"
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
