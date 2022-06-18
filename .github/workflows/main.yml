@@ -24,8 +24,10 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - name: Webhook Trigger
-  with:
-    webhook_url: http://2.82.194.204/job/WebCrawler/
+        uses: actions/checkout@v3
+        with: 
+          data: "{\"event_type\":\"build\"}"
+          webhook_url: "http://2.82.194.204/job/WebCrawler/"
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
