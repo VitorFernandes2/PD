@@ -1,51 +1,32 @@
 pipeline {
     agent any
-
-   // tools {
-        //Install the Maven version configured as "M3" and add it to the path.
-   //     maven "M3"
-   // }
     stages {
         stage('Build webCrawler') {
-        steps {
-        		checkout scm
-            sh '''
-        		    cd webcrawler
-        		    ./gradlew build
-        		'''
-              }
-          //  post {
-                // If Maven was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-
-                //success {
-                	// send slack and email notification
-                    //sh 'docker tag teste-img:1.01 tppd2122/teste:1.01'
-                  	//sh 'echo dockerhub_PSW | docker login -u dockerhub_USR --password-stdin'
-                	//sh 'docker push tppd2122/teste:1.01'
-                    //junit '**/target/surefire-reports/TEST-*.xml'
-                    //archiveArtifacts 'target/*.jar'
-              //}
-
-          	// }
-        }
-
-        stage ('Build and Push to Docker') {
-          steps {
-            script{
-                dockerImage = docker.build("tppd2122/webcrawler", '-f webcrawler/Dockerfile .')
-                docker.withRegistry( '', dockerhub) {
-                  dockerImage.push("0.2.0")
-                  dockerImage.push('latest')
+            steps {
+            	checkout scm
+                sh '''
+            		    cd webcrawler
+            		    ./gradlew build
+            		'''
+            }
+             post {
+                success {
+              	echo "Send slack and email notification"
+                //junit '**/target/surefire-reports/TEST-*.xml'
+                //archiveArtifacts 'target/*.jar'
                 }
-              }
-        //  }
-        //  sh 'docker build . -t springboot-crud-example -f webcrawler/Dockerfile'
-            //script {
-              //  docker.build 'my-image:1.01'  'webcrawler/Dockerfile'
-            //}
-          }
-
+            }
+        }
+        stage ('Build and Push to Docker') {
+            steps {
+                script{
+                    dockerImage = docker.build("tppd2122/webcrawler", '-f webcrawler/Dockerfile .')
+                    docker.withRegistry( '', 'dockerhub') {
+                      dockerImage.push("0.2.0")
+                      dockerImage.push('latest')
+                    }
+                }
+            }
         }
     }
 }
