@@ -19,8 +19,7 @@ dependencies {
 }
 
 bootJar {
-	archiveBaseName = 'webcrawler'
-	archiveVersion =  '0.2.0'
+	archiveName = "WEBCRAWLER.jar"
 }
 
 tasks.named('test') {
