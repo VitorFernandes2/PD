@@ -1,21 +1,18 @@
 <template>
   <div class="home">
     <div>
-      <p>Descricao de whatever que isto faça</p>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus et ante
-        aliquet, ultricies turpis scelerisque, ornare turpis. Mauris elementum
-        pulvinar mi in interdum. Curabitur finibus blandit ligula, et pulvinar
-        risus venenatis non. Vestibulum fringilla iaculis leo, non ullamcorper
-        purus ullamcorper nec. Phasellus hendrerit dolor ex, vehicula vehicula
-        mi lacinia volutpat. Praesent in euismod urna, ut mollis nisi. Praesent
-        varius placerat velit, in sollicitudin felis facilisis et. Praesent nec
-        congue mauris, vel cursus sapien. Proin volutpat arcu mauris, vel
-        egestas urna condimentum ut. Aliquam dolor risus, ullamcorper ut quam
-        non, volutpat bibendum turpis. Suspendisse nec aliquet arcu. Suspendisse
-        a auctor sapien. Mauris sagittis odio sagittis, dignissim erat non,
-        elementum lorem. Integer sed arcu sed enim imperdiet malesuada sit amet
-        sollicitudin arcu.
+        "No, thank you! We don’t want any more visitors, well-wishers or distant
+        relations!" - <span>Bilbo Baggins</span>
+      </p>
+      <p>
+        This website will show you a bunch of information about the Lord of the
+        Rings cinematic universe as well as from the books!
+      </p>
+      <p>
+        This information is presented in the form of infographics that are
+        recorded every X time from
+        <a href="https://the-one-api.dev/" target="_blanket">this</a> API.
       </p>
     </div>
   </div>
@@ -36,5 +33,25 @@ export default {
   padding: 30px;
   border-radius: 50px;
   font-size: 18px;
+  color: #fff;
+}
+
+.home div p:first-child {
+  text-align: center;
+}
+
+p a:link,
+p a:visited {
+  color: #192723;
+  text-decoration: none;
+}
+
+p a:hover {
+  color: #e9d83d;
+  text-decoration: underline;
+}
+
+span {
+  font-weight: 700;
 }
 </style>
