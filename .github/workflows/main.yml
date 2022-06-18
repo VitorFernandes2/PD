@@ -30,7 +30,7 @@ jobs:
         with:
           url: "http://2.82.194.204"
           job_name: "WebCrawler"
-          username: "gihub"
+          username: "github"
           api_token: "119bacf6f28249b6a97921a9714e893103"
           timeout: "1000"
 
