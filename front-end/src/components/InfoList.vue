@@ -1,14 +1,13 @@
 <template>
   <div class="infoList" :class="{ small: !shown }">
-    <div @click="shown = false" class="bt" v-show="shown">
+    <div @click="change" class="bt" v-show="shown">
       <span>&lt;</span>
     </div>
-    <div @click="shown = true" class="bt" v-show="!shown">
+    <div @click="change" class="bt" v-show="!shown">
       <span>&gt;</span>
     </div>
     <div :class="{ show: shown }" class="lista">
       <ul>
-        <li>Elemento da lista</li>
         <li v-for="e in lista" :key="e">{{ e }}</li>
       </ul>
     </div>
@@ -23,6 +22,13 @@ export default {
       lista: ["mock", "mock", "mock", "mock"],
       shown: true,
     };
+  },
+  emits: ["changed"],
+  methods: {
+    change() {
+      this.shown = !this.shown;
+      this.$emit("changed", this.shown);
+    },
   },
 };
 </script>

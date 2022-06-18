@@ -1,6 +1,7 @@
 <template>
-  <div class="infographics">
-    <info-list />
+  <div class="infographics" :class="{ 'side-padding': listVisible }">
+    <info-list @changed="listChanged" />
+    <app-infographic />
     <!-- <div>
       <p>
         <span>Note:</span>This information is relative only to the original Lord
@@ -12,16 +13,33 @@
 
 <script>
 import InfoList from "../components/InfoList.vue";
+import AppInfographic from "../components/Infographic.vue";
 
 export default {
   name: "InfographicsView",
   components: {
     InfoList,
+    AppInfographic,
+  },
+  data() {
+    return {
+      listVisible: true,
+    };
+  },
+  methods: {
+    listChanged(v) {
+      console.log(v);
+      this.listVisible = v;
+    },
   },
 };
 </script>
 
 <style scoped>
+.side-padding {
+  padding-left: 200px;
+}
+
 span {
   font-weight: 700;
 }
