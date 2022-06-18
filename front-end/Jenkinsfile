@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+	tools {
+   		  nodejs "node"
+   	}
+
+    stages {
+        stage('Build FrontEnd') {
+        steps {
+        		checkout scm
+
+        		sh '''
+              cd front-end
+              npm install
+              npm run build
+            '''
+        }
+           post {
+                success {
+              	echo "Send slack and email notification"
+                //junit '**/target/surefire-reports/TEST-*.xml'
+                //archiveArtifacts 'target/*.jar'
+                }
+            }
+        }
+        stage ('Build and Push to Docker') {
+            steps {
+            sh '''
+            mv front-end/Dockerfile Dockerfile
+            '''
+                script{
+                    dockerImage = docker.build("tppd2122/frontend")
+                    docker.withRegistry( '', 'dockerhub') {
+                      dockerImage.push("0.0.1")
+                      dockerImage.push('latest')
+                    }
+                }
+            }
+        }
+    }
+}
