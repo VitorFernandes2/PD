@@ -1,6 +1,6 @@
 package com.isec.pd.infographicsservice.service;
 
-import com.isec.pd.infographicsservice.repository.TestEntity;
+import com.isec.pd.infographicsservice.repository.entity.TestEntity;
 import com.isec.pd.infographicsservice.repository.TestRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.isec.pd.infographicsservice.repository;
+package com.isec.pd.infographicsservice.repository.entity;
 
 import lombok.Builder;
 import org.springframework.data.annotation.Id;
