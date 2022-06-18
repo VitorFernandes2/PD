@@ -30,8 +30,8 @@ jobs:
         with:
           url: "http://2.82.194.204"
           job_name: "WebCrawler"
-          username: "async"
-          api_token: "110e998d7b393003c3d443d8c0fff1aae5"
+          username: "gihub"
+          api_token: "119bacf6f28249b6a97921a9714e893103"
           timeout: "1000"
 
       # Runs a single command using the runners shell
