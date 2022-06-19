@@ -14,12 +14,20 @@
 <script>
 import InfoList from "../components/InfoList.vue";
 import AppInfographic from "../components/Infographic.vue";
+const axios = require("axios").default;
+
+const URL_GET = "http://localhost:8080/infographic";
 
 export default {
   name: "InfographicsView",
   components: {
     InfoList,
     AppInfographic,
+  },
+  beforeMount() {
+    axios.get(URL_GET).then((d) => {
+      if (d.status == 200) console.log(d.data);
+    });
   },
   data() {
     return {

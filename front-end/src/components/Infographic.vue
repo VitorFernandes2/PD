@@ -1,7 +1,7 @@
 <template>
   <div class="infographic">
     <div class="dados">
-      <section class="info small">
+      <!-- <section class="info small">
         <p>Books</p>
         <p>
           {{ data.numberBooks }}
@@ -18,7 +18,7 @@
         <p>
           {{ data.numberCharacters }}
         </p>
-      </section>
+      </section> -->
     </div>
     <p>This infographic was obtained at: {{ data.createAt }}</p>
     <img
