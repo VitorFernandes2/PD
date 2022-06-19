@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+	tools {
+   		  maven "maven"
+   	}
+
+    stages {
+        stage('Build Infographics') {
+        steps {
+        		checkout scm
+
+        		sh '''
+              cd infographics-service
+              mvn -f pom.xml clean package
+            '''
+        }
+           post {
+                success {
+              	echo "Send slack and email notification"
+                //junit '**/target/surefire-reports/TEST-*.xml'
+                //archiveArtifacts 'target/*.jar'
+                }
+            }
+        }
+        stage ('Build and Push to Docker') {
+            steps {
+                script{
+                    dockerImage = docker.build("tppd2122/infographics", "-f infographics-service/Dockerfile .")
+                    docker.withRegistry( '', 'dockerhub') {
+                      dockerImage.push("0.0.1")
+                      dockerImage.push('latest')
+                    }
+                }
+            }
+        }
+    }
+}
