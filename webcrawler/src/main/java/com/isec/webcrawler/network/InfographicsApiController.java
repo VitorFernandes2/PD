@@ -63,7 +63,7 @@ public class InfographicsApiController {
                             logger.error("Something went wrong while creating infographic data! Request {}", request);
                         }
                         return Mono.just(clientResponse);
-                    });
+                    }).block();
         } finally {
             logger.info("Finished creating infographic data!");
         }
