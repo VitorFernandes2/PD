@@ -29,12 +29,12 @@ public class InfographicService {
         logger.info("New request from WebCrawler with the infographic: {}", infographic.toString());
 
         InfographicEntity entity = modelMapper.map(infographic, InfographicEntity.class);
-//        entity.setCreateAt(new Date(System.currentTimeMillis()));
 
         repository.save(entity);
     }
 
     public List<Infographic> getInfographics() {
+        logger.info("New request from Web Page to get all Infographics");
         return repository.findAll()
                 .stream()
                 .map(infographicEntity -> modelMapper.map(infographicEntity, Infographic.class))
@@ -42,6 +42,7 @@ public class InfographicService {
     }
 
     public void deleteInfographic(String id) {
+        logger.info("New request from Web Page to get delete the Infographic: {}", id);
         repository.deleteById(id);
     }
 }
