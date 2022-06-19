@@ -29,7 +29,6 @@ public class InfographicService {
 
         InfographicEntity entity = modelMapper.map(infographic, InfographicEntity.class);
 //        entity.setCreateAt(new Date(System.currentTimeMillis()));
-
         repository.save(entity);
     }
 }
