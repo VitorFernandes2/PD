@@ -17,8 +17,7 @@ public class InfographicEntity {
     @Id
     private String id;
     @CreatedDate
-    private Date createAt;
-
+    private Date createdAt;
     private int numberBooks;
     private int numberMovies;
     private int numberCharacters;

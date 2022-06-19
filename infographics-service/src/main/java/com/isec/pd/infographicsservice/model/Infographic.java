@@ -1,6 +1,5 @@
 package com.isec.pd.infographicsservice.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
@@ -10,7 +9,6 @@ import java.util.Map;
 
 @Data
 @Jacksonized
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Infographic {
     private Date createdAt;
     private int numberBooks;
