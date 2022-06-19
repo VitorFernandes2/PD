@@ -28,7 +28,7 @@ public class InfographicService {
         logger.info("New request from WebCrawler with the infographic: {}", infographic.toString());
 
         InfographicEntity entity = modelMapper.map(infographic, InfographicEntity.class);
-        entity.setCreateAt(new Date(System.currentTimeMillis()));
+//        entity.setCreateAt(new Date(System.currentTimeMillis()));
 
         repository.save(entity);
     }
