@@ -1,0 +1,52 @@
+---
+- hosts: frontend_machine
+  become: true
+
+  vars:
+    host_port: 27017
+    container_port: "27017"
+    db_username: "admin"
+    db_password: "admin"
+    
+  vars_files:
+    secret.yml
+
+  tasks:
+    - name: install certain python modules for docker
+      pip:
+        name: "{{ item.name }}"
+        state: "{{ item.state }}"
+      with_items:
+        - { name: docker, version: 2.0.0 , state: "absent" }
+        - { name: docker-py, version: 1.10.6 , state: "present" } 
+
+    - name: Install docker python package
+      pip: name=docker-py state=present 
+    
+    - name: Pull MongoDB image
+      docker_image:
+        name: mongo
+        source: pull
+        state: present
+
+    - name: Stop any container running
+      docker_container:
+        name: mongo_pd_{{inventory_hostname}}
+        state: absent
+
+    - name: Install and run mongodb
+      shell: docker container run -d --publish "{{host_port + groups['frontend_machine'].index(inventory_hostname)}}:{{container_port}}" --name mongo_pd_{{inventory_hostname}} -e MONGO_INITDB_ROOT_USERNAME={{ db_username }} -e MONGO_INITDB_ROOT_PASSWORD={{ db_password }} mongo
+    
+    - name: Notify of pipeline success
+      mail:
+        host: smtp.gmail.com
+        port: 587
+        sender: "{{ inventory_hostname }}"
+        username: "{{ email_smtp_username }}"
+        password: "{{ email_smtp_password }}"
+        to: luisilva99miu86@gmail.com
+        subject: Email By Ansible
+        body: Test successful
+      delegate_to: localhost
+        
+      
