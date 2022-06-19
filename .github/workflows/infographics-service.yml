@@ -1,14 +1,14 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: CI Inforgraphics
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: [ "infographics-service" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "infographics-service" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -29,17 +29,7 @@ jobs:
         uses: joshlk/jenkins-githubaction@master
         with:
           url: "http://2.82.194.204"
-          job_name: "WebCrawler"
-          username: "Async Guys"
-          api_token: "110e998d7b393003c3d443d8c0fff1aae5"
+          job_name: "Infographics"
+          username: "github"
+          api_token: "119bacf6f28249b6a97921a9714e893103"
           timeout: "1000"
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
