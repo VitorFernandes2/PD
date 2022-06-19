@@ -6,16 +6,20 @@ name: CI FrontEnd
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "feature/FrontEnd**", "release/FrontEnd/**" ]
+    branches: [ "**FrontEnd**" ]
     paths:
       - "front-end/**"
   pull_request:
-    branches: [ "feature/FrontEnd**", "release/FrontEnd/**" ]
+    branches: [ "**FrontEnd**" ]
+    paths:
+      - "front-end/**"
+  create:
+    branches: [ "**FrontEnd**" ]
     paths:
       - "front-end/**"
   release:
     types: [created]
-    branches: [ "feature/FrontEnd**", "release/FrontEnd/**" ]
+    branches: [ "**FrontEnd**" ]
     paths:
       - "front-end/**"
 
