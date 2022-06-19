@@ -9,7 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class InfographicService {
@@ -31,5 +32,16 @@ public class InfographicService {
 //        entity.setCreateAt(new Date(System.currentTimeMillis()));
 
         repository.save(entity);
+    }
+
+    public List<Infographic> getInfographics() {
+        return repository.findAll()
+                .stream()
+                .map(infographicEntity -> modelMapper.map(infographicEntity, Infographic.class))
+                .collect(Collectors.toList());
+    }
+
+    public void deleteInfographic(String id) {
+        repository.deleteById(id);
     }
 }
