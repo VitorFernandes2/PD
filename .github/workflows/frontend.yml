@@ -6,15 +6,23 @@ name: CI FrontEnd
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "FrontEnd" ]
+    branches: [ "**FrontEnd**" ]
+    paths:
+      - "front-end/**"
   pull_request:
-    branches: [ "FrontEnd" ]
+    branches: [ "**FrontEnd**" ]
+    paths:
+      - "front-end/**"
+  release:
+    types: [created]
+    branches: [ "**FrontEnd**" ]
+    paths:
+      - "front-end/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
@@ -24,7 +32,15 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
+
+      - name: Set environment variables
+        run: |
+          echo "GIT_BRANCH=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+
+      - name: Use environment variables
+        run: |
+          echo "GIT_BRANCH=${GIT_BRANCH}"
+
       - name: Trigger jenkins job
         uses: joshlk/jenkins-githubaction@master
         with:
@@ -32,4 +48,5 @@ jobs:
           job_name: "FrontEnd"
           username: "github"
           api_token: "119bacf6f28249b6a97921a9714e893103"
+          parameters: '{"BRANCH":"${{env.GIT_BRANCH}}"}'
           timeout: "1000"
