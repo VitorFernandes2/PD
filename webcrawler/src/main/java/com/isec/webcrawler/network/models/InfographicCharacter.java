@@ -9,6 +9,14 @@ public class InfographicCharacter {
 
     private String name;
     private String birth;
+    private String height;
+    private String race;
+    private String gender;
+    private String spouse;
+    private String death;
+    private String realm;
+    private String hair;
+    private String wikiUrl;
     private List<String> quotes;
 
     public String getName() {
@@ -35,12 +43,84 @@ public class InfographicCharacter {
         this.birth = birth;
     }
 
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public String getRace() {
+        return race;
+    }
+
+    public void setRace(String race) {
+        this.race = race;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getSpouse() {
+        return spouse;
+    }
+
+    public void setSpouse(String spouse) {
+        this.spouse = spouse;
+    }
+
+    public String getDeath() {
+        return death;
+    }
+
+    public void setDeath(String death) {
+        this.death = death;
+    }
+
+    public String getRealm() {
+        return realm;
+    }
+
+    public void setRealm(String realm) {
+        this.realm = realm;
+    }
+
+    public String getHair() {
+        return hair;
+    }
+
+    public void setHair(String hair) {
+        this.hair = hair;
+    }
+
+    public String getWikiUrl() {
+        return wikiUrl;
+    }
+
+    public void setWikiUrl(String wikiUrl) {
+        this.wikiUrl = wikiUrl;
+    }
+
     @Override
     public String toString() {
-        return "InfographicCharacter {" +
-                "name=" + name +
-                ", birth=" + birth +
+        return "InfographicCharacter{" +
+                "name='" + name + '\'' +
+                ", birth='" + birth + '\'' +
+                ", height='" + height + '\'' +
+                ", race='" + race + '\'' +
+                ", gender='" + gender + '\'' +
+                ", spouse='" + spouse + '\'' +
+                ", death='" + death + '\'' +
+                ", realm='" + realm + '\'' +
+                ", hair='" + hair + '\'' +
+                ", wikiUrl='" + wikiUrl + '\'' +
                 ", quotes=" + quotes +
-                "}";
+                '}';
     }
 }

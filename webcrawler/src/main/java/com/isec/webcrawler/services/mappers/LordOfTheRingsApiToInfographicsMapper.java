@@ -43,6 +43,14 @@ public class LordOfTheRingsApiToInfographicsMapper {
             final InfographicCharacter infographicCharacter = new InfographicCharacter();
             infographicCharacter.setName(character.getName());
             infographicCharacter.setBirth(character.getBirth());
+            infographicCharacter.setDeath(character.getDeath());
+            infographicCharacter.setHeight(character.getHeight());
+            infographicCharacter.setRace(character.getRace());
+            infographicCharacter.setGender(character.getGender());
+            infographicCharacter.setSpouse(character.getSpouse());
+            infographicCharacter.setRealm(character.getRealm());
+            infographicCharacter.setHair(character.getHair());
+            infographicCharacter.setWikiUrl(character.getWikiUrl());
             infographicCharacter.setQuotes(getQuotesResponse.getDocs().stream()
                     .filter(quote -> quote.getCharacter().equals(character.getId()))
                     .map(Quote::getDialog)
