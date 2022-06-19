@@ -19,8 +19,7 @@ pipeline {
            post {
                 success {
               	echo "Send slack and email notification"
-                //junit '**/target/surefire-reports/TEST-*.xml'
-                //archiveArtifacts 'target/*.jar'
+                archiveArtifacts 'front-end/dist/'
                 }
             }
         }
@@ -30,10 +29,15 @@ pipeline {
             mv front-end/Dockerfile Dockerfile
             '''
                 script{
-                    dockerImage = docker.build("tppd2122/frontend")
-                    docker.withRegistry( '', 'dockerhub') {
-                      dockerImage.push("0.0.1")
-                      dockerImage.push('latest')
+                  if (env.BRANCH.contains("release")) {
+                        def packageVersion = sh(script: "grep \"version\" front-end/package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
+                        echo "Version is ${packageVersion}"
+
+                        dockerImage = docker.build("tppd2122/frontend")
+                        docker.withRegistry( '', 'dockerhub') {
+                          dockerImage.push("${packageVersion}")
+                          dockerImage.push('latest')
+                        }
                     }
                 }
             }
