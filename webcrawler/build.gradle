@@ -25,3 +25,9 @@ bootJar {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+task printProjectVersion {
+	doLast() {
+		println version
+	}
+}
