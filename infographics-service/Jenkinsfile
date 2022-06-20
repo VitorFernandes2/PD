@@ -26,11 +26,16 @@ pipeline {
         stage ('Build and Push to Docker') {
             steps {
                 script{
+                if (env.BRANCH.contains("release")) {
+                     def packageVersion = "0.0.1"
+                     //def packageVersion = sh(script: "mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q", returnStdout: true)
+                     //echo "Version is ${packageVersion}"
                     dockerImage = docker.build("tppd2122/infographics", "-f infographics-service/Dockerfile .")
                     docker.withRegistry( '', 'dockerhub') {
-                      dockerImage.push("0.0.1")
+                      dockerImage.push("${packageVersion}")
                       dockerImage.push('latest')
                     }
+                  }
                 }
             }
         }
