@@ -10,7 +10,7 @@ pipeline {
         steps {
         		checkout scm
 
-        		sh '''
+        	sh '''
               cd front-end
               npm install
               npm run build
@@ -19,25 +19,21 @@ pipeline {
            post {
                 success {
               	echo "Send slack and email notification"
-                archiveArtifacts 'front-end/dist/'
+                //junit '**/target/surefire-reports/TEST-*.xml'
+                //archiveArtifacts 'target/*.jar'
                 }
             }
         }
         stage ('Build and Push to Docker') {
             steps {
-            sh '''
-            mv front-end/Dockerfile Dockerfile
-            '''
                 script{
-                  if (env.BRANCH.contains("release")) {
-                        def packageVersion = sh(script: "grep \"version\" front-end/package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
-                        echo "Version is ${packageVersion}"
-
-                        dockerImage = docker.build("tppd2122/frontend")
-                        docker.withRegistry( '', 'dockerhub') {
-                          dockerImage.push("${packageVersion}")
-                          dockerImage.push('latest')
-                        }
+                    sh '''
+                     mv front-end/Dockerfile Dockerfile
+                    '''
+                    dockerImage = docker.build("tppd2122/frontend")
+                    docker.withRegistry( '', 'dockerhub') {
+                      dockerImage.push("0.0.1")
+                      dockerImage.push('latest')
                     }
                 }
             }
