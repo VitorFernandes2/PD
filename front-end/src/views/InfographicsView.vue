@@ -24,10 +24,10 @@ export default {
     InfoList,
     AppInfographic,
   },
-  beforeMount() {
-    axios.get(URL_GET).then((d) => {
-      if (d.status == 200) console.log(d.data);
-    });
+  async beforeMount() {
+    const d = await axios.get(URL_GET);
+    console.log(d.status);
+    if (d.status == 200) console.log(d.data);
   },
   data() {
     return {
