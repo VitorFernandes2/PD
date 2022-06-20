@@ -31,14 +31,22 @@
 </template>
 
 <script>
+const axios = require("axios").default;
+
+const URL_DEL = "http://localhost:8080/infographic";
+
 export default {
   name: "AppInfographic",
   props: {
     data: { type: Object, required: true },
   },
   methods: {
-    delete(id) {
-      console.log(id);
+    async delete(id) {
+      const r = await axios.delete(URL_DEL, {
+        id: id
+      });
+
+      console.log(r);
     },
   },
   data() {
