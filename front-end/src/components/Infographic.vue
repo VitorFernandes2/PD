@@ -1,6 +1,6 @@
 <template>
   <div class="infographic">
-    <div class="select" v-if="hasSelect">
+    <div class="select" v-if="hasNoSelect">
       <h1>Select an infographic</h1>
     </div>
     <div v-else class="dados">
@@ -48,10 +48,10 @@
         </section>
       </div>
     </div>
-    <p v-show="hasSelect">
+    <p v-show="!hasNoSelect">
       This infographic was obtained at: {{ data.createAt }}
     </p>
-    <p v-show="hasSelect">Scores obtained from Rotten Tomatoes</p>
+    <p v-show="!hasNoSelect">Scores obtained from Rotten Tomatoes</p>
     <img
       alt="Delete this infographic"
       title="Delete this infographic"
@@ -90,7 +90,7 @@ export default {
     };
   },
   computed: {
-    hasSelect() {
+    hasNoSelect() {
       return Object.keys(this.data).length === 0;
     },
   },
