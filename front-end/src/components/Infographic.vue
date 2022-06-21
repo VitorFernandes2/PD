@@ -50,7 +50,7 @@
     <img
       alt="Delete this infographic"
       title="Delete this infographic"
-      @click="delete data._id"
+      @click="deleteInfographic(data._id)"
       :src="`${publicPath}imgs/delete.png`"
     />
   </div>
@@ -72,7 +72,7 @@ export default {
     //this.randomChar = this.data.characters[chars][i];
   },
   methods: {
-    async delete(id) {
+    async deleteInfographic(id) {
       const r = await axios.delete(URL_DEL, {
         id: id,
       });
