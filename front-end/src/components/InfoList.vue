@@ -1,10 +1,7 @@
 <template>
   <div class="infoList" :class="{ small: !shown }">
-    <div @click="change" class="bt" v-show="shown">
-      <span>&lt;</span>
-    </div>
-    <div @click="change" class="bt" v-show="!shown">
-      <span>&gt;</span>
+    <div @click="change" class="bt" :class="{ rotate: !shown }">
+      <img :src="`${publicPath}imgs/arrow.png`" />
     </div>
     <div :class="{ show: shown }" class="lista">
       <ul>
@@ -26,6 +23,7 @@ export default {
     return {
       lista: ["mock", "mock", "mock", "mock"],
       shown: true,
+      publicPath: process.env.BASE_URL,
     };
   },
   emits: ["changed", "clicked_info"],
@@ -46,12 +44,15 @@ export default {
   position: absolute;
   top: 15%;
   left: 0;
-  transition: 0.5s;
   background-color: #a18a43;
   color: #fff;
   border-radius: 0 10px 10px 0;
   padding: 5px;
   height: 83%;
+}
+
+.rotate {
+  transform: rotateZ(180deg);
 }
 
 .small {
@@ -68,12 +69,16 @@ export default {
   cursor: pointer;
 }
 
+.bt img {
+  width: 20px;
+  height: 20px;
+}
+
 .lista {
   width: 200px;
   margin-top: 40px;
   left: -220px;
   position: relative;
-  transition: 0.3s;
   overflow-y: scroll;
   -ms-overflow-style: none; /* IE e Edge */
   scrollbar-width: none; /* Firefox */
@@ -87,7 +92,13 @@ export default {
   left: 0;
 }
 
+ul {
+  padding: 0;
+}
+
 li {
   list-style-type: none;
+  cursor: pointer;
+  margin: 10px;
 }
 </style>

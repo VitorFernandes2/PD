@@ -1,6 +1,9 @@
 <template>
   <div class="infographic">
-    <div class="dados">
+    <div class="select" v-if="hasSelect">
+      <h1>Select an infographic</h1>
+    </div>
+    <div v-else class="dados">
       <div class="container">
         <section class="info small">
           <p>Books</p>
@@ -45,12 +48,14 @@
         </section>
       </div>
     </div>
-    <p>This infographic was obtained at: {{ data.createAt }}</p>
-    <p>Scores obtained from Rotten Tomatoes</p>
+    <p v-show="hasSelect">
+      This infographic was obtained at: {{ data.createAt }}
+    </p>
+    <p v-show="hasSelect">Scores obtained from Rotten Tomatoes</p>
     <img
       alt="Delete this infographic"
       title="Delete this infographic"
-      @click="deleteInfographic(data._id)"
+      @click="deleteInfographic(data.id)"
       :src="`${publicPath}imgs/delete.png`"
     />
   </div>
@@ -66,24 +71,14 @@ export default {
   props: {
     data: { type: Object, required: true },
   },
-  beforeMount() {
-    // let chars = Math.random() * this.data.characters.length;
-    // let i = Math.random() * this.data.characters[chars].length;
-    //this.randomChar = this.data.characters[chars][i];
-  },
   methods: {
     async deleteInfographic(id) {
       const r = axios({
         method: "delete",
         url: URL_DEL,
         headers: {},
-        data: {
-          id: id,
-        },
+        data: id,
       });
-      // const r = await axios.delete(URL_DEL, data:{
-      //   id: id,
-      // });
 
       console.log(r);
     },
@@ -93,6 +88,11 @@ export default {
       publicPath: process.env.BASE_URL,
       randomChar: null,
     };
+  },
+  computed: {
+    hasSelect() {
+      return Object.keys(this.data).length === 0;
+    },
   },
 };
 </script>
@@ -106,6 +106,10 @@ export default {
   padding: 30px;
   border-radius: 50px;
   padding-bottom: 50px;
+}
+
+.select {
+  text-align: center;
 }
 
 .dados {
