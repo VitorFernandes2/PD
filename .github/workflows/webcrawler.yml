@@ -38,7 +38,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-       - name: Set environment variables
+      - name: Set environment variables
         run: |
           echo "GIT_BRANCH=${GITHUB_REF_NAME}" >> $GITHUB_ENV
       - name: Use environment variables
