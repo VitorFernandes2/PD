@@ -1,41 +1,102 @@
+def notifyProductionDeploy() {
+    def packageVersion = sh(script: "cd infographics-service && mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true)
+    def icons = [":unicorn_face:", ":beer:", ":bee:", ":man_dancing:",
+    ":partying_face:", ":ghost:", ":dancer:", ":scream_cat:"]
+    def randomIndex = (new Random()).nextInt(icons.size())
+    def message = "@here Build <${env.BUILD_URL}|${currentBuild.displayName} ${env.JOB_NAME} ${packageVersion}> " +
+    "successfuly deployed to the production ${icons[randomIndex]}"
+    slackSend(channel: "#jenkins", message: message, color: 'good')
+
+    mail to: "tppd2122@gmail.com",
+        subject: "Build ${currentBuild.displayName} ${env.JOB_NAME}",
+        body: "Build ${currentBuild.displayName} ${env.JOB_NAME} ${packageVersion} \n${env.BUILD_URL}\n" +
+        "successfuly deployed to the production!"
+}
+
+def notifyProductionDeployFails() {
+    def icons = [":skull_and_crossbones:", ":face_palm:", ":see_no_evil:", ":no_good:",
+    ":no_entry:", ":disguised_face:",]
+    def randomIndex = (new Random()).nextInt(icons.size())
+    def message = "@here Shame on you! Build <${env.BUILD_URL}|${currentBuild.displayName} ${env.JOB_NAME}> " +
+    "deploy failed! ${icons[randomIndex]}"
+    slackSend(channel: "#jenkins", message: message, color: 'danger')
+
+    mail to: "tppd2122@gmail.com",
+        subject: "Build ${currentBuild.displayName} ${env.JOB_NAME}",
+        body: "Build ${currentBuild.displayName} ${env.JOB_NAME} \n${env.BUILD_URL}\ndeploy failed!"
+}
+def notifyProductionDeployStarted(){
+    def message = "@here Build <${env.BUILD_URL}|${currentBuild.displayName} ${env.JOB_NAME}> deploy starts!"
+    slackSend(channel: "#jenkins", message: message, color: 'warning')
+}
+
+def notifyBuildStarted(){
+    def message = "@here Build <${env.BUILD_URL}|${currentBuild.displayName} ${env.JOB_NAME}> starts!" +
+    "\nBranch: <${env.GIT_URL - '.git' }/tree/${env.BRANCH}|${env.BRANCH}>"
+    slackSend(channel: "#jenkins", message: message, color: 'warning')
+}
+def notifyBuildSuccess(){
+    def message = "@here Build <${env.BUILD_URL}|${currentBuild.displayName} ${env.JOB_NAME}> succeeded!"
+    slackSend(channel: "#jenkins", message: message, color: 'good')
+
+}
+def notifyBuildFailed(){
+    def message = "@here Shame on you! Build <${env.BUILD_URL}|${currentBuild.displayName} ${env.JOB_NAME}> failed!"
+    slackSend(channel: "#jenkins", message: message, color: 'danger')
+    mail to: "tppd2122@gmail.com",
+        subject: "Build ${currentBuild.displayName} ${env.JOB_NAME}",
+        body: "Shame on you! Build ${currentBuild.displayName} ${env.JOB_NAME} \n${env.BUILD_URL}\nfailed!"
+}
+
 pipeline {
     agent any
-
 	tools {
-   		  maven "maven"
+        maven "maven"
    	}
-
     stages {
         stage('Build Infographics') {
-        steps {
-        		checkout scm
-
-        		sh '''
-              cd infographics-service
-              mvn -f pom.xml clean package
-            '''
-        }
+            steps {
+                notifyBuildStarted()
+                checkout scm
+                sh '''
+                    cd infographics-service
+                    mvn -f pom.xml clean package
+                '''
+            }
            post {
                 success {
-              	echo "Send slack and email notification"
-                //junit '**/target/surefire-reports/TEST-*.xml'
-                //archiveArtifacts 'target/*.jar'
+                    notifyBuildSuccess()
+                    archiveArtifacts 'infographics-service/target/*.jar'
+                }
+                failure {
+                    notifyBuildFailed()
                 }
             }
         }
-        stage ('Build and Push to Docker') {
+        stage ('Push to Docker') {
+            when {
+                expression {
+                    env.BRANCH.contains("release")
+                }
+            }
             steps {
-                script{
-                if (env.BRANCH.contains("release")) {
-                     def packageVersion = "0.0.1"
-                     //def packageVersion = sh(script: "mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q", returnStdout: true)
-                     //echo "Version is ${packageVersion}"
+                notifyProductionDeployStarted()
+                script {
+                    def packageVersion = sh(script: "cd infographics-service && mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true)
+                    echo "Version is ${packageVersion}"
                     dockerImage = docker.build("tppd2122/infographics", "-f infographics-service/Dockerfile .")
                     docker.withRegistry( '', 'dockerhub') {
-                      dockerImage.push("${packageVersion}")
-                      dockerImage.push('latest')
+                        dockerImage.push("${packageVersion}")
+                        dockerImage.push('latest')
                     }
-                  }
+                }
+            }
+            post {
+                success {
+                    notifyProductionDeploy()
+                }
+                failure {
+                    notifyProductionDeployFails()
                 }
             }
         }
