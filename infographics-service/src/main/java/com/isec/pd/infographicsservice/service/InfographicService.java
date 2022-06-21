@@ -42,7 +42,7 @@ public class InfographicService {
     }
 
     public void deleteInfographic(String id) {
-        logger.info("New request from Web Page to get delete the Infographic: {}", id);
+        logger.info("New request from Web Page to delete the Infographic: {}", id);
         repository.deleteById(id);
     }
 }
