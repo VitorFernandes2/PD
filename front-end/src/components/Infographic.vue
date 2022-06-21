@@ -73,9 +73,17 @@ export default {
   },
   methods: {
     async deleteInfographic(id) {
-      const r = await axios.delete(URL_DEL, {
-        id: id,
+      const r = axios({
+        method: "delete",
+        url: URL_DEL,
+        headers: {},
+        data: {
+          id: id,
+        },
       });
+      // const r = await axios.delete(URL_DEL, data:{
+      //   id: id,
+      // });
 
       console.log(r);
     },
