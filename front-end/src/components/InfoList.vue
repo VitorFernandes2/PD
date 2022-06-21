@@ -8,8 +8,8 @@
     </div>
     <div :class="{ show: shown }" class="lista">
       <ul>
-        <li v-for="(e, i) in lista" @click="infoClicked(i)" :key="e">
-          {{ e.createAt }}
+        <li v-for="(e, i) in list" @click="infoClicked(i)" :key="e">
+          {{ e.createdAt }}
         </li>
       </ul>
     </div>
@@ -74,7 +74,7 @@ export default {
   left: -220px;
   position: relative;
   transition: 0.3s;
-  overflow-x: scroll;
+  overflow-y: scroll;
   -ms-overflow-style: none; /* IE e Edge */
   scrollbar-width: none; /* Firefox */
 }

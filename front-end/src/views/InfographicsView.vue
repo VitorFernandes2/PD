@@ -12,9 +12,9 @@
 <script>
 import InfoList from "../components/InfoList.vue";
 import AppInfographic from "../components/Infographic.vue";
-// const axios = require("axios").default;
+const axios = require("axios").default;
 
-// const URL_GET = "http://localhost:8080/infographic";
+const URL_GET = "http://localhost:8080/infographic";
 
 export default {
   name: "InfographicsView",
@@ -23,12 +23,12 @@ export default {
     AppInfographic,
   },
   async beforeMount() {
-    // const d = await axios.get(URL_GET);
-    // console.log(d.status);
-    // if (d.status == 200){
-    //  this.infographics = d.data;
-    //   console.log(d.data);
-    // }
+    const d = await axios.get(URL_GET);
+    console.log(d.status);
+    if (d.status == 200) {
+      this.infographics = d.data;
+      console.log(d.data);
+    }
   },
   data() {
     return {
