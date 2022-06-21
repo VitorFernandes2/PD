@@ -8,7 +8,9 @@
     </div>
     <div :class="{ show: shown }" class="lista">
       <ul>
-        <li v-for="e in lista" :key="e">{{ e }}</li>
+        <li v-for="(e, i) in lista" @click="infoClicked(i)" :key="e">
+          {{ e.createAt }}
+        </li>
       </ul>
     </div>
   </div>
@@ -26,11 +28,14 @@ export default {
       shown: true,
     };
   },
-  emits: ["changed"],
+  emits: ["changed", "clicked_info"],
   methods: {
     change() {
       this.shown = !this.shown;
       this.$emit("changed", this.shown);
+    },
+    infoClicked(i) {
+      this.$emit("clicked_info", i);
     },
   },
 };
@@ -69,7 +74,7 @@ export default {
   left: -220px;
   position: relative;
   transition: 0.3s;
-  overflow: scroll;
+  overflow-x: scroll;
   -ms-overflow-style: none; /* IE e Edge */
   scrollbar-width: none; /* Firefox */
 }

@@ -1,7 +1,11 @@
 <template>
   <div class="infographics" :class="{ 'side-padding': listVisible }">
-    <info-list @changed="listChanged" :list="infographics" />
-    <app-infographic :data="mock" />
+    <info-list
+      @changed="listChanged"
+      @clicked_info="infoClicked"
+      :list="infographics"
+    />
+    <app-infographic :data="selected" />
   </div>
 </template>
 
@@ -120,11 +124,15 @@ export default {
         ],
       },
       infographics: [],
+      selected: {},
     };
   },
   methods: {
     listChanged(v) {
       this.listVisible = v;
+    },
+    infoClicked(i) {
+      this.selected = this.infographics[i];
     },
   },
 };
