@@ -53,6 +53,7 @@ pipeline {
     stages {
         stage('Build webCrawler') {
             steps {
+                cleanWs()
                 notifyBuildStarted()
                 checkout scm
                 sh '''
