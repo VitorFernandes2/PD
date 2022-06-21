@@ -1,30 +1,99 @@
+def notifyProductionDeploy() {
+    def packageVersion = sh(script:"cd webcrawler && ./gradlew printProjectVersion | grep 'version:'", returnStdout: true)
+    def icons = [":unicorn_face:", ":beer:", ":bee:", ":man_dancing:",
+    ":partying_face:", ":ghost:", ":dancer:", ":scream_cat:"]
+    def randomIndex = (new Random()).nextInt(icons.size())
+    def message = "@here Build <${env.BUILD_URL}|${currentBuild.displayName} ${env.JOB_NAME} ${packageVersion}> " +
+    "successfuly deployed to the production ${icons[randomIndex]}"
+    slackSend(channel: "#jenkins", message: message, color: 'good')
+
+    mail to: "tppd2122@gmail.com",
+        subject: "Build ${currentBuild.displayName} ${env.JOB_NAME}",
+        body: "Build ${currentBuild.displayName} ${env.JOB_NAME} ${packageVersion - 'version:'} \n${env.BUILD_URL}\n" +
+        "successfuly deployed to the production!"
+}
+
+def notifyProductionDeployFails() {
+    def icons = [":skull_and_crossbones:", ":face_palm:", ":see_no_evil:", ":no_good:",
+    ":no_entry:", ":disguised_face:",]
+    def randomIndex = (new Random()).nextInt(icons.size())
+    def message = "@here Shame on you! Build <${env.BUILD_URL}|${currentBuild.displayName} ${env.JOB_NAME}> " +
+    "deploy failed! ${icons[randomIndex]}"
+    slackSend(channel: "#jenkins", message: message, color: 'danger')
+
+    mail to: "tppd2122@gmail.com",
+        subject: "Build ${currentBuild.displayName} ${env.JOB_NAME}",
+        body: "Build ${currentBuild.displayName} ${env.JOB_NAME} \n${env.BUILD_URL}\ndeploy failed!"
+}
+def notifyProductionDeployStarted(){
+    def message = "@here Build <${env.BUILD_URL}|${currentBuild.displayName} ${env.JOB_NAME}> deploy starts!"
+    slackSend(channel: "#jenkins", message: message, color: 'warning')
+}
+
+def notifyBuildStarted(){
+    def message = "@here Build <${env.BUILD_URL}|${currentBuild.displayName} ${env.JOB_NAME}> starts!" +
+    "\nBranch: <${env.GIT_URL - '.git' }/tree/${env.BRANCH}|${env.BRANCH}>"
+    slackSend(channel: "#jenkins", message: message, color: 'warning')
+}
+def notifyBuildSuccess(){
+    def message = "@here Build <${env.BUILD_URL}|${currentBuild.displayName} ${env.JOB_NAME}> succeeded!"
+    slackSend(channel: "#jenkins", message: message, color: 'good')
+
+}
+def notifyBuildFailed(){
+    def message = "@here Shame on you! Build <${env.BUILD_URL}|${currentBuild.displayName} ${env.JOB_NAME}> failed!"
+    slackSend(channel: "#jenkins", message: message, color: 'danger')
+    mail to: "tppd2122@gmail.com",
+        subject: "Build ${currentBuild.displayName} ${env.JOB_NAME}",
+        body: "Shame on you! Build ${currentBuild.displayName} ${env.JOB_NAME} \n${env.BUILD_URL}\nfailed!"
+}
+
 pipeline {
     agent any
     stages {
         stage('Build webCrawler') {
             steps {
-            	checkout scm
+                notifyBuildStarted()
+                checkout scm
                 sh '''
-            		    cd webcrawler
-            		    ./gradlew build
-            		'''
+                    cd webcrawler
+                    ./gradlew build
+                '''
             }
-             post {
+            post {
                 success {
-              	echo "Send slack and email notification"
-                //junit '**/target/surefire-reports/TEST-*.xml'
-                //archiveArtifacts 'target/*.jar'
+                    notifyBuildSuccess()
+                    archiveArtifacts 'webcrawler/build/libs/*.jar'
+                }
+                failure {
+                    notifyBuildFailed()
                 }
             }
         }
-        stage ('Build and Push to Docker') {
+        stage ('Push to Docker') {
+            when {
+                expression {
+                    env.BRANCH.contains("release")
+                }
+            }
             steps {
-                script{
+                notifyProductionDeployStarted()
+                script {
+                    def packageVersion = sh(script:"cd webcrawler && ./gradlew printProjectVersion | grep 'version:'", returnStdout: true)
+                    echo "Version is ${packageVersion - 'version:'} "
                     dockerImage = docker.build("tppd2122/webcrawler", '-f webcrawler/Dockerfile .')
                     docker.withRegistry( '', 'dockerhub') {
-                      dockerImage.push("0.2.0")
+                      dockerImage.push("${packageVersion - 'version:'}")
                       dockerImage.push('latest')
                     }
+                }
+            }
+            post {
+                success {
+                    notifyProductionDeploy()
+                }
+                failure {
+                    notifyProductionDeployFails()
                 }
             }
         }
