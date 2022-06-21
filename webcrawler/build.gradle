@@ -28,6 +28,6 @@ tasks.named('test') {
 
 task printProjectVersion {
 	doLast() {
-		println "version:" + version
+		print "version:" + version
 	}
 }
