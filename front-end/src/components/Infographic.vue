@@ -1,26 +1,52 @@
 <template>
   <div class="infographic">
     <div class="dados">
-      <!-- <section class="info small">
-        <p>Books</p>
-        <p>
-          {{ data.numberBooks }}
-        </p>
-      </section>
-      <section class="info med">
-        <p>Movies</p>
-        <p>
-          {{ data.numberMovies }}
-        </p>
-      </section>
-      <section class="info big">
-        <p>Characters</p>
-        <p>
-          {{ data.numberCharacters }}
-        </p>
-      </section> -->
+      <div class="container">
+        <section class="info small">
+          <p>Books</p>
+          <p>
+            {{ data.numberBooks }}
+          </p>
+        </section>
+        <section class="info small">
+          <p>Movies</p>
+          <p>
+            {{ data.numberMovies }}
+          </p>
+        </section>
+        <section class="info small">
+          <p>Characters</p>
+          <p>
+            {{ data.numberCharacters }}
+          </p>
+        </section>
+        <section class="info small">
+          <p>Quotes</p>
+          <p>{{ data.numberQuotes }}</p>
+        </section>
+      </div>
+      <div class="container">
+        <section class="info" v-for="e in data.books" :key="e.name">
+          <p>
+            {{ e.name }}
+          </p>
+          <p>{{ e.chapters.length }} chapters</p>
+        </section>
+      </div>
+      <div class="container">
+        <section class="info" v-for="e in data.movies" :key="e.name">
+          <p>
+            {{ e.name }}
+          </p>
+          <p>Runtime: {{ e.runtimeInMinutes }} mins</p>
+          <p>Budget: {{ e.budgetInMillions }}M</p>
+          <p>Revenue: {{ e.boxOfficeRevenueInMillions }}M</p>
+          <p>Score: {{ e.rottenTomatoesScore }}%</p>
+        </section>
+      </div>
     </div>
     <p>This infographic was obtained at: {{ data.createAt }}</p>
+    <p>Scores obtained from Rotten Tomatoes</p>
     <img
       alt="Delete this infographic"
       title="Delete this infographic"
@@ -40,10 +66,15 @@ export default {
   props: {
     data: { type: Object, required: true },
   },
+  beforeMount() {
+    // let chars = Math.random() * this.data.characters.length;
+    // let i = Math.random() * this.data.characters[chars].length;
+    //this.randomChar = this.data.characters[chars][i];
+  },
   methods: {
     async delete(id) {
       const r = await axios.delete(URL_DEL, {
-        id: id
+        id: id,
       });
 
       console.log(r);
@@ -52,6 +83,7 @@ export default {
   data() {
     return {
       publicPath: process.env.BASE_URL,
+      randomChar: null,
     };
   },
 };
@@ -70,10 +102,21 @@ export default {
 
 .dados {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.infographic > p {
+  font-size: 12px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: center;
 }
 
 .info {
@@ -83,6 +126,8 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  margin: 10px;
+  padding: 10px;
 }
 
 .small {
@@ -99,6 +144,7 @@ export default {
   width: 200px;
   height: 200px;
 }
+
 img {
   width: 30px;
   float: right;

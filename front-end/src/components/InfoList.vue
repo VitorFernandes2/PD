@@ -17,6 +17,9 @@
 <script>
 export default {
   name: "InfoList",
+  props: {
+    list: Array,
+  },
   data() {
     return {
       lista: ["mock", "mock", "mock", "mock"],
@@ -41,7 +44,7 @@ export default {
   transition: 0.5s;
   background-color: #a18a43;
   color: #fff;
-  border-radius: 10px;
+  border-radius: 0 10px 10px 0;
   padding: 5px;
   height: 83%;
 }

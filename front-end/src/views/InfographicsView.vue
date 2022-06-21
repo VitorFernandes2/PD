@@ -1,22 +1,16 @@
 <template>
   <div class="infographics" :class="{ 'side-padding': listVisible }">
-    <info-list @changed="listChanged" />
+    <info-list @changed="listChanged" :list="infographics" />
     <app-infographic :data="mock" />
-    <!-- <div>
-      <p>
-        <span>Note:</span>This information is relative only to the original Lord
-        of the Rings trilogy
-      </p>
-    </div> -->
   </div>
 </template>
 
 <script>
 import InfoList from "../components/InfoList.vue";
 import AppInfographic from "../components/Infographic.vue";
-const axios = require("axios").default;
+// const axios = require("axios").default;
 
-const URL_GET = "http://localhost:8080/infographic";
+// const URL_GET = "http://localhost:8080/infographic";
 
 export default {
   name: "InfographicsView",
@@ -25,9 +19,12 @@ export default {
     AppInfographic,
   },
   async beforeMount() {
-    const d = await axios.get(URL_GET);
-    console.log(d.status);
-    if (d.status == 200) console.log(d.data);
+    // const d = await axios.get(URL_GET);
+    // console.log(d.status);
+    // if (d.status == 200){
+    //  this.infographics = d.data;
+    //   console.log(d.data);
+    // }
   },
   data() {
     return {
@@ -69,32 +66,30 @@ export default {
             rottenTomatoesScore: 94,
           },
         ],
-        characters: [
-          {
-            Human: [
-              {
-                name: "",
-                birth: 6,
-                quotes: [],
-              },
-              {
-                name: "",
-                birth: 6,
-                quotes: [],
-              },
-            ],
-            Elf: [
-              {
-                name: "",
-                birth: 6,
-              },
-              {
-                name: "",
-                birth: 6,
-              },
-            ],
-          },
-        ],
+        characters: {
+          Human: [
+            {
+              name: "",
+              birth: 6,
+              quotes: [],
+            },
+            {
+              name: "",
+              birth: 6,
+              quotes: [],
+            },
+          ],
+          Elf: [
+            {
+              name: "",
+              birth: 6,
+            },
+            {
+              name: "",
+              birth: 6,
+            },
+          ],
+        },
         mostTalkativeCharacters: [
           {
             name: "Tyrion Lannister",
@@ -124,11 +119,11 @@ export default {
           },
         ],
       },
+      infographics: [],
     };
   },
   methods: {
     listChanged(v) {
-      console.log(v);
       this.listVisible = v;
     },
   },
