@@ -18,6 +18,10 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 }
 
+jar {
+	enabled = false
+}
+
 bootJar {
 	archiveName = "WEBCRAWLER.jar"
 }
