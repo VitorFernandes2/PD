@@ -10,6 +10,7 @@ import java.util.Map;
 @Data
 @Jacksonized
 public class Infographic {
+    private String id;
     private Date createdAt;
     private int numberBooks;
     private int numberMovies;
