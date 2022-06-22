@@ -1,0 +1,128 @@
+---
+- hosts: localhost
+  become: Yes
+
+  vars_prompt:
+
+    - name: project_path
+      prompt: "What is the project path? (example: /home/ == /home/PD)"
+      private: no
+      
+  vars_files:
+    secret.yml
+
+  tasks:
+    - name: Check if project path is correct
+      stat:
+        path: "{{ project_path }}PD"
+      register: result_project_path
+    
+    - name: Notify of wrong project path
+      mail:
+        host: smtp.gmail.com
+        port: 587
+        sender: "{{ inventory_hostname }}"
+        username: "{{ email_smtp_username }}"
+        password: "{{ email_smtp_password }}"
+        to: "{{ email_smtp_username }}"
+        subject: "Wrong project path!"
+        body: "Please insert a valid project path. (example: /home/ == /home/PD)"
+      delegate_to: localhost
+      when: not result_project_path.stat.exists
+    
+    - name: End Play Book 1 Pipeline
+      meta: end_play
+      when: not result_project_path.stat.exists
+    
+    - name: Check docker-compose existance
+      stat:
+        path: "/usr/local/bin/docker-compose"
+      register: result
+    
+    - name: docker-compose guide-lines
+      shell: "cat {{ project_path }}PD/ansible/README.md"
+      register: readme_ansible
+      when: not result.stat.exists
+    
+    - name: Notify of missing docker-compose software
+      mail:
+        host: smtp.gmail.com
+        port: 587
+        sender: "{{ inventory_hostname }}"
+        username: "{{ email_smtp_username }}"
+        password: "{{ email_smtp_password }}"
+        to: "{{ email_smtp_username }}"
+        subject: "Docker-compose not found!"
+        body: |
+          '{% for line in readme_ansible.stdout_lines %}
+          {{ line }}
+          {% endfor %}'
+      delegate_to: localhost
+      when: not result.stat.exists
+    
+    - name: End Play Book 2 Pipeline
+      meta: end_play
+      when: not result.stat.exists
+    
+    - name: docker-compose get version
+      shell: "/usr/local/bin/docker-compose --version"
+      register: docker_compose_version
+    
+    - name: Notify of wrong docker-compose version
+      mail:
+        host: smtp.gmail.com
+        port: 587
+        sender: "{{ inventory_hostname }}"
+        username: "{{ email_smtp_username }}"
+        password: "{{ email_smtp_password }}"
+        to: "{{ email_smtp_username }}"
+        subject: "Wrong docker-compose version!"
+        body: "Currently using {{ docker_compose_version.stdout }}.\nFor this project please use docker-compose version 1.29.2."
+      delegate_to: localhost
+      when: not '"1.29.2" in docker_compose_version.stdout'
+    
+    - name: End Play Book 3 Pipeline
+      meta: end_play
+      when: not '"1.29.2" in docker_compose_version.stdout'
+    
+    - name: Stop general
+      shell: "/usr/local/bin/docker-compose -f {{ project_path }}PD/infographics-service/docker-compose.yml down"
+    
+    - name: Deploy general
+      shell: "/usr/local/bin/docker-compose -f {{ project_path }}PD/infographics-service/docker-compose.yml up -d"
+      register: deploy_general
+      ignore_errors: True
+    
+    - name: Notify of pipeline failure cause
+      mail:
+        host: smtp.gmail.com
+        port: 587
+        sender: "{{ inventory_hostname }}"
+        username: "{{ email_smtp_username }}"
+        password: "{{ email_smtp_password }}"
+        to: "{{ email_smtp_username }}"
+        subject: "Error during docker-compose deploy!"
+        body: |
+          '{% for line in deploy_general.stderr_lines %}
+          {{ line }}
+          {% endfor %}'
+      delegate_to: localhost
+      when: deploy_general.failed
+    
+    - name: End Play Book 4 Pipeline
+      meta: end_play
+      when: deploy_general.failed
+    
+    - name: Notify of pipeline success
+      mail:
+        host: smtp.gmail.com
+        port: 587
+        sender: "{{ inventory_hostname }}"
+        username: "{{ email_smtp_username }}"
+        password: "{{ email_smtp_password }}"
+        to: "{{ email_smtp_username }}"
+        subject: "Docker-compose started Successfully!"
+        body: "Pipeline Completed Successfully!"
+      delegate_to: localhost
+        
+      
