@@ -4,7 +4,7 @@
 
   vars:
     host_port: 27017
-    container_port: "27017"
+    container_port: 27017
     db_username: "admin"
     db_password: "admin"
     
@@ -29,7 +29,7 @@
         source: pull
         state: present
 
-    - name: Stop any container running
+    - name: Stop any container Mongo running
       docker_container:
         name: mongo_pd_{{inventory_hostname}}
         state: absent
@@ -44,8 +44,8 @@
         sender: "{{ inventory_hostname }}"
         username: "{{ email_smtp_username }}"
         password: "{{ email_smtp_password }}"
-        to: luisilva99miu86@gmail.com
-        subject: Email By Ansible
+        to: "{{ email_smtp_username }}"
+        subject: "Email By Ansible with host {{ inventory_hostname }}"
         body: Test successful
       delegate_to: localhost
         
