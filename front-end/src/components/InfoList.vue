@@ -14,6 +14,7 @@
 </template>
 
 <script>
+const test = "2022-06-21T22:47:20.027+00:00";
 export default {
   name: "InfoList",
   props: {
@@ -34,6 +35,9 @@ export default {
     },
     infoClicked(i) {
       this.$emit("clicked_info", i);
+    },
+    convertDate() {
+      console.log(test.split("T")[0]);
     },
   },
 };

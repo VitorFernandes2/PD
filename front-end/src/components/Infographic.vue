@@ -28,6 +28,7 @@
           <p>{{ data.numberQuotes }}</p>
         </section>
       </div>
+      <div class="info full"><p>Books</p></div>
       <div class="container">
         <section class="info" v-for="e in data.books" :key="e.name">
           <p>
@@ -36,6 +37,7 @@
           <p>{{ e.chapters.length }} chapters</p>
         </section>
       </div>
+      <div class="info full"><p>Movies</p></div>
       <div class="container">
         <section class="info" v-for="e in data.movies" :key="e.name">
           <p>
@@ -140,6 +142,13 @@ export default {
   align-items: center;
   margin: 10px;
   padding: 10px;
+}
+
+.full {
+  width: 100%;
+  text-align: center;
+  margin: 5px;
+  padding: 5px;
 }
 
 .small {
