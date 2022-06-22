@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  mongodb:
+    container_name: mongo_pd
+    image: mongo:5.0
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+    healthcheck:
+      test:
+        - CMD
+        - mongo
+        - --eval
+        - "db.adminCommand('ping')"
+    networks:
+      - orlando
+
+  infographicService:
+    container_name: infographics
+    image: tppd2122/infographics:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - orlando
+
+  webCrawler:
+    container_name: webcrawler
+    image: tppd2122/webcrawler:latest
+    ports:
+      - 8081:8080
+    depends_on:
+      - infographicService
+    networks:
+      - orlando
+
+  frontEnd:
+    container_name: frontend
+    image: tppd2122/frontend:latest
+    ports:
+      - 80:80
+    depends_on:
+      - infographicService
+    networks:
+      - orlando
+
+networks:
+  orlando:
+    name: orlando
+    driver: bridge

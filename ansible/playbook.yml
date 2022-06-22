@@ -1,0 +1,26 @@
+---
+- hosts: localhost
+    
+  vars_files:
+    secret.yml
+
+  tasks:
+    - name: Stop general
+      shell: /usr/local/bin/docker-compose -f /home/luis/Documents/PD/infographics-service/docker-compose.yml down
+    
+    - name: Deploy general
+      shell: /usr/local/bin/docker-compose -f /home/luis/Documents/PD/infographics-service/docker-compose.yml up -d
+    
+    - name: Notify of pipeline success
+      mail:
+        host: smtp.gmail.com
+        port: 587
+        sender: "{{ inventory_hostname }}"
+        username: "{{ email_smtp_username }}"
+        password: "{{ email_smtp_password }}"
+        to: "{{ email_smtp_username }}"
+        subject: "Docker compose started Successfully!"
+        body: Test successful
+      delegate_to: localhost
+        
+      
