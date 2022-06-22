@@ -49,6 +49,29 @@
           <p>Score: {{ e.rottenTomatoesScore }}%</p>
         </section>
       </div>
+      <div class="info full"><p>Random Character</p></div>
+      <div class="container" v-if="randomChar != null">
+        <section class="info">
+          <p>Name</p>
+          <p>{{ randomChar.name }}</p>
+        </section>
+        <section class="info">
+          <p>Race</p>
+          <p>{{ randomChar.race }}</p>
+        </section>
+        <section class="info">
+          <p>Gender</p>
+          <p>{{ randomChar.gender }}</p>
+        </section>
+        <section class="info">
+          <p>Birth</p>
+          <p>{{ randomChar.birth }}</p>
+        </section>
+        <section class="info">
+          <p>Death</p>
+          <p>{{ randomChar.death }}</p>
+        </section>
+      </div>
     </div>
     <p v-show="!hasNoSelect">
       This infographic was obtained at: {{ data.createAt }}
@@ -72,6 +95,15 @@ export default {
   name: "AppInfographic",
   props: {
     data: { type: Object, required: true },
+  },
+  beforeMount() {
+    let keys = Object.keys(this.data.characters);
+    let rnd = Math.floor(Math.random() * keys.length);
+    let key = keys[rnd];
+
+    rnd = Math.floor(Math.random() * this.data.characters[key].length);
+    let obj = this.data.characters[key][rnd];
+    this.randomChar = obj;
   },
   methods: {
     async deleteInfographic(id) {
