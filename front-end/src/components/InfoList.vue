@@ -1,6 +1,6 @@
 <template>
   <div class="infoList" :class="{ small: !shown }">
-    <div @click="change" class="bt" :class="{ rotate: !shown }">
+    <div @click="change" class="bt" :class="{ rotate: shown }">
       <img :src="`${publicPath}imgs/arrow.png`" />
     </div>
     <div :class="{ show: shown }" class="lista">
@@ -36,7 +36,10 @@ export default {
       this.$emit("clicked_info", i);
     },
     convertDate(date) {
-      return date.split("T")[0];
+      let s = date.split("T");
+      let d = s[0];
+      let h = s[1].split(".")[0];
+      return d + " " + h;
     },
   },
 };
@@ -44,7 +47,7 @@ export default {
 
 <style scoped>
 .infoList {
-  position: absolute;
+  position: fixed;
   top: 15%;
   left: 0;
   background-color: #a18a43;
@@ -64,8 +67,8 @@ export default {
 
 .bt {
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 10px;
+  right: 10px;
   width: 20px;
   height: 20px;
   text-align: center;
@@ -75,6 +78,7 @@ export default {
 .bt img {
   width: 20px;
   height: 20px;
+  filter: brightness(0) invert(1);
 }
 
 .lista {
@@ -103,5 +107,12 @@ li {
   list-style-type: none;
   cursor: pointer;
   margin: 10px;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 5px;
+}
+
+li:hover {
+  background-color: #dbc023;
 }
 </style>

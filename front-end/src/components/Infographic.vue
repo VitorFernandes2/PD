@@ -28,7 +28,7 @@
           <p>{{ data.numberQuotes }}</p>
         </section>
       </div>
-      <div class="info full"><p>Books</p></div>
+      <div class="full"><p>Books</p></div>
       <div class="container">
         <section class="info" v-for="e in data.books" :key="e.name">
           <p>
@@ -37,7 +37,7 @@
           <p>{{ e.chapters.length }} chapters</p>
         </section>
       </div>
-      <div class="info full"><p>Movies</p></div>
+      <div class="full"><p>Movies</p></div>
       <div class="container">
         <section class="info" v-for="e in data.movies" :key="e.name">
           <p>
@@ -49,7 +49,19 @@
           <p>Score: {{ e.rottenTomatoesScore }}%</p>
         </section>
       </div>
-      <div class="info full"><p>Random Character</p></div>
+      <div class="full"><p>Most Talktive Characters</p></div>
+      <div class="container">
+        <section
+          class="info"
+          v-for="(e, i) in data.mostTalkativeCharacters"
+          :key="e.name"
+        >
+          <p>{{ i + 1 }}º</p>
+          <p>{{ e.name }}</p>
+          <p>{{ e.quotes }} quotes</p>
+        </section>
+      </div>
+      <div class="full"><p>Random Character</p></div>
       <div class="container" v-if="randomChar != null">
         <section class="info">
           <p>Name</p>
@@ -73,10 +85,10 @@
         </section>
       </div>
     </div>
-    <p v-show="!hasNoSelect">
-      This infographic was obtained at: {{ data.createAt }}
+    <p v-if="!hasNoSelect">
+      This infographic was obtained at: {{ convertDate(data.createdAt) }}
     </p>
-    <p v-show="!hasNoSelect">Scores obtained from Rotten Tomatoes</p>
+    <p v-if="!hasNoSelect">Scores obtained from Rotten Tomatoes</p>
     <img
       alt="Delete this infographic"
       title="Delete this infographic"
@@ -96,6 +108,7 @@ export default {
   props: {
     data: { type: Object, required: true },
   },
+  emits: ["deleteInfo"],
   beforeMount() {
     let keys = Object.keys(this.data.characters);
     let rnd = Math.floor(Math.random() * keys.length);
@@ -107,14 +120,20 @@ export default {
   },
   methods: {
     async deleteInfographic(id) {
-      const r = axios({
+      const r = await axios({
         method: "delete",
         url: URL_DEL,
         headers: {},
         data: id,
       });
-
-      console.log(r);
+      if (r.status == 200) this.$emit("deleteInfo", id);
+      //console.log(r);
+    },
+    convertDate(date) {
+      let s = date.split("T");
+      let d = s[0];
+      let h = s[1].split(".")[0];
+      return d + " " + h;
     },
   },
   data() {
@@ -159,10 +178,11 @@ export default {
 
 .container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .info {
@@ -176,11 +196,16 @@ export default {
   padding: 10px;
 }
 
+section.info {
+  flex: 1 1 0px;
+}
+
 .full {
   width: 100%;
   text-align: center;
   margin: 5px;
   padding: 5px;
+  color: #dbc023;
 }
 
 .small {
