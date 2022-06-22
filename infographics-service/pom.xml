@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.isec.pd</groupId>
 	<artifactId>infographics-service</artifactId>
-	<version>1.0.0</version>
+	<version>1.1.0</version>
 	<name>Infographics Service</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
