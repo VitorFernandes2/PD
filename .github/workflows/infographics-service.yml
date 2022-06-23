@@ -1,14 +1,27 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI Inforgraphics
+name: CI Infographics
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "infographics-service" ]
+    branches: [ "**infographics-service**" ]
+    paths:
+      - "infographics-service/**"
   pull_request:
-    branches: [ "infographics-service" ]
+    branches: [ "**infographics-service**" ]
+    paths:
+      - "infographics-service/**"
+  create:
+    branches: [ "**infographics-service**" ]
+    paths:
+      - "infographics-service/**"
+  release:
+    types: [created]
+    branches: [ "**infographics-service**" ]
+    paths:
+      - "infographics-service/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -24,7 +37,15 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
+
+      - name: Set environment variables
+        run: |
+          echo "GIT_BRANCH=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+
+      - name: Use environment variables
+        run: |
+          echo "GIT_BRANCH=${GIT_BRANCH}"
+
       - name: Trigger jenkins job
         uses: joshlk/jenkins-githubaction@master
         with:
@@ -32,4 +53,5 @@ jobs:
           job_name: "Infographics"
           username: "github"
           api_token: "119bacf6f28249b6a97921a9714e893103"
+          parameters: '{"BRANCH":"${{env.GIT_BRANCH}}"}'
           timeout: "1000"
