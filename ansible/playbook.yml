@@ -14,7 +14,7 @@
   tasks:
     - name: Check if project path is correct
       stat:
-        path: {{ project_path }}PD
+        path: "{{ project_path }}PD"
       register: result_project_path
     
     - name: Notify of wrong project path
@@ -36,7 +36,7 @@
     
     - name: Check docker-compose existance
       stat:
-        path: /usr/local/bin/docker-compose
+        path: "/usr/local/bin/docker-compose"
       register: result
     
     - name: docker-compose guide-lines
@@ -86,10 +86,10 @@
       when: not '"1.29.2" in docker_compose_version.stdout'
     
     - name: Stop general
-      shell: /usr/local/bin/docker-compose -f {{ project_path }}PD/infographics-service/docker-compose.yml down
+      shell: "/usr/local/bin/docker-compose -f {{ project_path }}PD/infographics-service/docker-compose.yml down"
     
     - name: Deploy general
-      shell: /usr/local/bin/docker-compose -f {{ project_path }}PD/infographics-service/docker-compose.yml up -d
+      shell: "/usr/local/bin/docker-compose -f {{ project_path }}PD/infographics-service/docker-compose.yml up -d"
       register: deploy_general
       ignore_errors: True
     
@@ -122,7 +122,7 @@
         password: "{{ email_smtp_password }}"
         to: "{{ email_smtp_username }}"
         subject: "Docker-compose started Successfully!"
-        body: Test successful
+        body: "Pipeline Completed Successfully!"
       delegate_to: localhost
         
       
