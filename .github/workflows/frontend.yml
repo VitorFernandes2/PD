@@ -13,6 +13,10 @@ on:
     branches: [ "**FrontEnd**" ]
     paths:
       - "front-end/**"
+  create:
+    branches: [ "**FrontEnd**" ]
+    paths:
+      - "front-end/**"
   release:
     types: [created]
     branches: [ "**FrontEnd**" ]
