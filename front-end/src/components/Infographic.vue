@@ -101,7 +101,7 @@
 <script>
 const axios = require("axios").default;
 
-const URL_DEL = "http://infographics:8080/infographic";
+const URL_DEL = "http://172.22.0.3:8080/infographic";
 
 export default {
   name: "AppInfographic",

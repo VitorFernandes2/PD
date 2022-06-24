@@ -14,7 +14,7 @@ import InfoList from "../components/InfoList.vue";
 import AppInfographic from "../components/Infographic.vue";
 const axios = require("axios").default;
 
-const URL_GET = "http://infographics:8080/infographic";
+const URL_GET = "http://172.22.0.3:8080/infographic";
 
 export default {
   name: "InfographicsView",
