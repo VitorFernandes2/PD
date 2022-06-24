@@ -28,7 +28,7 @@ jobs:
       - name: Trigger jenkins job
         uses: joshlk/jenkins-githubaction@master
         with:
-          url: "http://2.82.194.204"
+          url: "http://localhost"
           job_name: "WebCrawler"
           username: "github"
           api_token: "119bacf6f28249b6a97921a9714e893103"
